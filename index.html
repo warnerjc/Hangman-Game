@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+
+<!-- on page load - load "game function / object" -->
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Hangman-Game</title>
+
+    <!-- <link rel="stylesheet" type="text/css" media="screen" href="assets/css/reset.css" /> -->
+    <link rel="stylesheet" type="text/css" media="screen" href="assets/css/style.css" />
+    
+</head>
+
+<body>
+    <h1>Hangman Game</h1>
+    <h2>Guess the Arcade Game</h2>
+    <h3>Press any key to start the game</h3>
+    <br>
+    <br>
+    
+    <!-- Use Bootstrap or Custom CSS to style HTML with Arcade Game Theme -->
+
+    <!-- Display blanks for random hangman word -->
+    <!-- Update blanks for correct guesses -->
+    <div>
+        <h2>Hangman Word:<span id="hangman-word">_ _ _ _ _ _ _</span></h2>
+    </div>    
+
+    <!-- Display guessed letters -->
+    <div>
+        <h2>Guessed Letters:<span id="guess-letters">_ _ _ _ _ _ _</span></h2>
+    </div>
+
+    <!-- Display Remaining Guesses Count -->
+    <div>
+        <h2>Remaining Guess Count:<span id="guess-count">10</span></h2>
+    </div>
+
+    <!-- Display Win Count -->
+    <div>
+        <h2>Win Count:<span id="win-count">0</span></h2>
+    </div>
+
+    <!-- Restart game after Win or Loss with new random hangman word -->
+
+
+    <script src="assets/javascript/game.js"></script>
+</body>
+
+</html>
