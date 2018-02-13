@@ -1,6 +1,8 @@
 // Create hangman game objects & functions
 
 // Event listener, check for key pressed, then start game
+
+/*
 window.onload = function () {
 
     console.log("On Load Called Properly");
@@ -9,6 +11,7 @@ window.onload = function () {
     //checkStartGame();
 
 }
+*/
 
 /* Currently non working code to check if any key is pressed to start the game
 function checkStartGame() {
@@ -17,69 +20,137 @@ function checkStartGame() {
 }
 */
 
-// Create global variables
+// Create global variables = span id for updating HTML
 var hangmanWord = document.getElementById("hangman-word");
-var guessLetters = document.getElementById("guess-letters");
-var guessCount = document.getElementById("guess-count");
-var winCount = document.getElementById("win-count");
+var gLetters = document.getElementById("guess-letters");
+var gCount = document.getElementById("guess-count");
+var wCount = document.getElementById("win-count");
 
-// Check that getElementById is grabbing correct Id.innerText
-console.log(hangmanWord.innerText);
-console.log(guessLetters.innerText);
-console.log(guessCount.innerText);
-console.log(winCount.innerText);
+// Set User Guess to ""
+var userGuess = "";
 
 // Object: hangmanGame - contains themed word list array and all in-game methods
 var hangmanGame = {
 
+    // Define child hangmanGame variables
+    guessCount: 10,
+    guessLetters: [],
+    winCount: 0,
+    
+    // Display blanks for random word
+    displayWordString: "",
+
     // Themed Hangman Game Word List Array
-    themeWordList: ["Space Invaders", "Pac Man", "Street Fighter II", "Donkey Kong", "Ms Pac Man", "Asteroids", "Defender", "Galaxian", "Donkey Kong Jr", "Mr Do", "Popeye", "Out Run", "Pump It Up", "NBA Jam", "Gun Fight", "Sega Network Mahjong MJ3", "Hang On", "Dinosaur King", "Wheels Speed Race", "Sega Network Mahjong MJ2", "Donkey Kong 3", "Sangokushi Taisen 2", "Initial D Arcade Stage 4", "Mario Bro", "Dance Dance Revolution", "Zoo Keeper", "Initial D Arcade Stage", "World Club Champion Football", "Mortal Kombat", "Jungle Hunt", "Scramble", "Mushiking King of the Beetles", "Mahjong Fight Club 3", "Super Cobra", "Oshare Majo Love and Berry", "Centipede", "Shining Force Cross", "Pengo", "Sangokushi Taisen", "Dragon's Lair", "Mortal Kombat II", "Pole Position", "Border Break", "Dig Dug", "Tempest", "TV Basketball", "The House of the Dead 4", "Radar Scope", "Tron", "Sengoku Taisen", "Dragon Quest  Monster Battle Road", "Q*bert", "Robotron 2084", "Samba de Amigo", "Asteroids Deluxe", "Missile Command", "Berzerk", "Sangokushi Taisen 3", "Pong", "Lord of Vermilion", "Sega Network Mahjong MJ4", "Kangaroo", "Battlezone", "Stargate", "Space Duel", "Big Buck Hunter", "Snake Pit", "Bagman", "Big Buck Safari", "Hard Drivin", "Gauntlet", "Sega Network Mahjong MJ5", "Millipede", "Race Drivin", "Time Traveler", "Space Ace", "Xevious", "Silver Strike Live", "H2Overdrive", "Atari Football", "Final Lap", "Paperboy", "Star Wars", "Beatmania", "Sprint 2", "Championship Sprint", "Pole Position II", "Breakout", "Sea Wolf", "Lunar Lander", "Super Sprint", "Marble Madness", "Sea Wolf II", "Rolling Thunder", "Tetris", "Arabian", "Terminator Salvation", "Blasteroids", "Super Breakout", "Pac Mania", "Indiana Jones and the Temple of Doom", "Four Trax", "Assault", "Gauntlet II", "Guitar Hero Arcade", "Drag Race", "Night Driver", "I Robot", "RBI Baseball", "Computer Space", "Death Race", "Dunk Shot", "Star Wars Return of the Jedi", "Dragon Spirit", "Triple Hunt", "Street Fighter", "Pac Man Clones", "Mario", "Golden Tee Golf", "Starhorse", "Bemani", "Sega Network Mahjong", "Sprint", "Mushiking", "Mahjong Fight Club", "Love and Berry"],
+    themeWordList: ["Space Invaders", "Pac Man", "Street Fighter II", "Donkey Kong", "Ms Pac Man", "Asteroids", "Defender", "Galaxian", "Donkey Kong Jr", "Mr Do", "Popeye", "Out Run", "Pump It Up", "NBA Jam", "Gun Fight", "Sega Network Mahjong MJ3", "Hang On", "Dinosaur King", "Wheels Speed Race", "Sega Network Mahjong MJ2", "Donkey Kong 3", "Sangokushi Taisen 2", "Initial D Arcade Stage 4", "Mario Bro", "Dance Dance Revolution", "Zoo Keeper", "Initial D Arcade Stage", "World Club Champion Football", "Mortal Kombat", "Jungle Hunt", "Scramble", "Mushiking King of the Beetles", "Mahjong Fight Club 3", "Super Cobra", "Oshare Majo Love and Berry", "Centipede", "Shining Force Cross", "Pengo", "Sangokushi Taisen", "Dragons Lair", "Mortal Kombat II", "Pole Position", "Border Break", "Dig Dug", "Tempest", "TV Basketball", "The House of the Dead 4", "Radar Scope", "Tron", "Sengoku Taisen", "Dragon Quest  Monster Battle Road", "Q*bert", "Robotron 2084", "Samba de Amigo", "Asteroids Deluxe", "Missile Command", "Berzerk", "Sangokushi Taisen 3", "Pong", "Lord of Vermilion", "Sega Network Mahjong MJ4", "Kangaroo", "Battlezone", "Stargate", "Space Duel", "Big Buck Hunter", "Snake Pit", "Bagman", "Big Buck Safari", "Hard Drivin", "Gauntlet", "Sega Network Mahjong MJ5", "Millipede", "Race Drivin", "Time Traveler", "Space Ace", "Xevious", "Silver Strike Live", "H2Overdrive", "Atari Football", "Final Lap", "Paperboy", "Star Wars", "Beatmania", "Sprint 2", "Championship Sprint", "Pole Position II", "Breakout", "Sea Wolf", "Lunar Lander", "Super Sprint", "Marble Madness", "Sea Wolf II", "Rolling Thunder", "Tetris", "Arabian", "Terminator Salvation", "Blasteroids", "Super Breakout", "Pac Mania", "Indiana Jones and the Temple of Doom", "Four Trax", "Assault", "Gauntlet II", "Guitar Hero Arcade", "Drag Race", "Night Driver", "I Robot", "RBI Baseball", "Computer Space", "Death Race", "Dunk Shot", "Star Wars Return of the Jedi", "Dragon Spirit", "Triple Hunt", "Street Fighter", "Pac Man Clones", "Mario", "Golden Tee Golf", "Starhorse", "Bemani", "Sega Network Mahjong", "Sprint", "Mushiking", "Mahjong Fight Club", "Love and Berry"],
 
     // Method: startGame - generate random word for this game instance
     startGame: function () {
 
         // Console log that game is started
         console.log("Game Started");
+        console.log("-------------");
 
         // Store random word from word list array
         var randWord = hangmanGame.themeWordList[Math.floor(Math.random() * hangmanGame.themeWordList.length)];
+        console.log("Logged: " + randWord);
 
         // Convert random word toLowerCase
         var lowerWord = randWord.toLowerCase();
+        console.log("Logged toLowerCase: " + lowerWord);
 
-        // Display blanks for random word
-        var displayWord = "";
-
+        // Create blanks in displayWord
         for (var i = 0; i < randWord.length; i++) {
             if (randWord.charAt(i) != " ") {
-                displayWord = displayWord + "_ ";
+                hangmanGame.displayWordString = hangmanGame.displayWordString + " _ ";
             } else {
-                //CSS styling needed to correct spacing - " | " used for now
-                displayWord = displayWord + " | ";
+                hangmanGame.displayWordString = hangmanGame.displayWordString + "\xa0\xa0";
             }
         };
 
-        // Check display word returning correct
-        console.log(displayWord);
+        console.log("Display Word: " + hangmanGame.displayWordString);
 
-        document.getElementById("hangman-word").innerText = displayWord;
-        
+        document.getElementById("hangman-word").innerText = hangmanGame.displayWordString;
+
         // Test random word correctly generated and toLowerCase
         console.log(randWord);
         console.log(lowerWord);
-    },  
+
+        // Check above console logs to confirm random word generated
+        console.log("-------------");
+        console.log("Random word should be generated by now.");
+
+        this.getKey(userGuess, lowerWord);
+    },
+
+    // Listen for key input from user and store most recent key input
+    getKey: function (evt, lWrd) {
+
+        console.log("Waiting for user letter guess");
+        console.log(evt + "+" + lWrd);
+        console.log("-------------");
+           
+        document.onkeyup = function (usrKey) {
+            console.log(usrKey.key.toLowerCase());
+            userGuess = usrKey.key.toLowerCase();
+            console.log("User Guess: " + userGuess);
+            hangmanGame.checkGuess(userGuess, 10, lWrd);
+        };
+    },
+
+    // Check guess vs hangman word
+    checkGuess: function (getGuess, cnt, word) {
+
+        // Console log that checkGuess properly called
+        console.log("----------");
+        console.log("checkGuess properly called");
+        console.log("----------");
+        console.log("Currnet Word: " + word);
+        console.log("Current User Guess: " + getGuess);
+        console.log("Current Guess Count: " + cnt);        
+
+        // While remaining guess count > 0
+        while (cnt > 0) {
+
+            console.log("Current Count: " + cnt);
+
+            // Search current Hangman word for guessed input from user
+            for (j = 0; j < word.length; j++) {
+
+                console.log(word, " + ", word.length);
+
+                // if correct guess - update word blanks - keep remaining guess count same - display guessed letter
+                // else if wrong - keep word blanks same - decrease remaining guess count - display guessed letter
+                if (getGuess == word.charAt(j)) {
+                    console.log("User Guess Match");
+                   
+                   //Something wrong with line below...
+                    this.displayWord.charAt(j) = getGuess;
+                    
+                    this.guessLetters = this.guessLetters + " + " + getGuess;
+                    document.getElementById("hangman-word").innerText = this.displayWord;
+                    document.getElementById("guess-letters").innerText = this.guessLetters;
+                } else {
+                    console.log("NO MATCH");
+                    
+                    this.guessLetters = " + " + getGuess;
+                    document.getElementById("guess-letters").innerText = this.guessLetters;
+                };
+
+                cnt = cnt - 1;
+
+            };
+
+
+        };
+    }
 
 }
 
-// Check guess vs hangman word
-// While remaining guess count > 0 or if guess count < max guesses
-// if correct - update word blanks - keep remaining guess count same - display guessed letter
-// if wrong - keep word blanks same - decrease remaining guess count - display guessed letter
 
-// Event Listener - get key - user guess - store char (toLowerCase)
 
 //Remove when checkStartGame running properly
-//hangmanGame.startGame(hangmanWord);
+//hangmanGame.startGame()
+//Currently running and displaying in console log prior to window.load "On Load Called Properly"
 hangmanGame.startGame();
 
 // Run Win Sequence
