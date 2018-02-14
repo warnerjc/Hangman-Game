@@ -1,25 +1,5 @@
 // Create hangman game objects & functions
 
-// Event listener, check for key pressed, then start game
-
-/*
-window.onload = function () {
-
-    console.log("On Load Called Properly");
-
-    //Check if any key is pressed to start the game
-    //checkStartGame();
-
-}
-*/
-
-/* Currently non working code to check if any key is pressed to start the game
-function checkStartGame() {
-    console.log("No Key Pressed");
-    //document.body.addEventListener("keyup", startGame());
-}
-*/
-
 // Create global variables = span id for updating HTML
 var hangmanWord = document.getElementById("hangman-word");
 var gLetters = document.getElementById("guess-letters");
@@ -27,21 +7,37 @@ var gCount = document.getElementById("guess-count");
 var wCount = document.getElementById("win-count");
 
 // Set User Guess to ""
-var userGuess = "";
+var userKey = "";
 
 // Object: hangmanGame - contains themed word list array and all in-game methods
 var hangmanGame = {
 
-    // Define child hangmanGame variables
-    guessCount: 10,
-    guessLetters: [],
+    // Define hangmanGame variables
+    maxGuesses: 10,
     winCount: 0,
-    
-    // Display blanks for random word
-    displayWordString: "",
+    correctGuessCount: 0,
+    wrongGuessCount: 0,
+    randWord: "",
+    lowerWord: "",
+    storeGuesses: [],
+    blankWord: [],
 
     // Themed Hangman Game Word List Array
     themeWordList: ["Space Invaders", "Pac Man", "Street Fighter II", "Donkey Kong", "Ms Pac Man", "Asteroids", "Defender", "Galaxian", "Donkey Kong Jr", "Mr Do", "Popeye", "Out Run", "Pump It Up", "NBA Jam", "Gun Fight", "Sega Network Mahjong MJ3", "Hang On", "Dinosaur King", "Wheels Speed Race", "Sega Network Mahjong MJ2", "Donkey Kong 3", "Sangokushi Taisen 2", "Initial D Arcade Stage 4", "Mario Bro", "Dance Dance Revolution", "Zoo Keeper", "Initial D Arcade Stage", "World Club Champion Football", "Mortal Kombat", "Jungle Hunt", "Scramble", "Mushiking King of the Beetles", "Mahjong Fight Club 3", "Super Cobra", "Oshare Majo Love and Berry", "Centipede", "Shining Force Cross", "Pengo", "Sangokushi Taisen", "Dragons Lair", "Mortal Kombat II", "Pole Position", "Border Break", "Dig Dug", "Tempest", "TV Basketball", "The House of the Dead 4", "Radar Scope", "Tron", "Sengoku Taisen", "Dragon Quest  Monster Battle Road", "Q*bert", "Robotron 2084", "Samba de Amigo", "Asteroids Deluxe", "Missile Command", "Berzerk", "Sangokushi Taisen 3", "Pong", "Lord of Vermilion", "Sega Network Mahjong MJ4", "Kangaroo", "Battlezone", "Stargate", "Space Duel", "Big Buck Hunter", "Snake Pit", "Bagman", "Big Buck Safari", "Hard Drivin", "Gauntlet", "Sega Network Mahjong MJ5", "Millipede", "Race Drivin", "Time Traveler", "Space Ace", "Xevious", "Silver Strike Live", "H2Overdrive", "Atari Football", "Final Lap", "Paperboy", "Star Wars", "Beatmania", "Sprint 2", "Championship Sprint", "Pole Position II", "Breakout", "Sea Wolf", "Lunar Lander", "Super Sprint", "Marble Madness", "Sea Wolf II", "Rolling Thunder", "Tetris", "Arabian", "Terminator Salvation", "Blasteroids", "Super Breakout", "Pac Mania", "Indiana Jones and the Temple of Doom", "Four Trax", "Assault", "Gauntlet II", "Guitar Hero Arcade", "Drag Race", "Night Driver", "I Robot", "RBI Baseball", "Computer Space", "Death Race", "Dunk Shot", "Star Wars Return of the Jedi", "Dragon Spirit", "Triple Hunt", "Street Fighter", "Pac Man Clones", "Mario", "Golden Tee Golf", "Starhorse", "Bemani", "Sega Network Mahjong", "Sprint", "Mushiking", "Mahjong Fight Club", "Love and Berry"],
+
+    // Call newGame on Game Win
+    newGame: function () {
+        // Reset hangmanGame variables
+        this.maxGuesses = 10;
+        this.storeGuesses = [];
+        this.blankWord = [];
+
+        // UPDATE HTML CONTENT
+        // Clear Hangman Word
+        // Clear Guessed Letters
+        // Update Remaining Guess Count
+
+    },
 
     // Method: startGame - generate random word for this game instance
     startGame: function () {
@@ -51,117 +47,118 @@ var hangmanGame = {
         console.log("-------------");
 
         // Store random word from word list array
-        var randWord = hangmanGame.themeWordList[Math.floor(Math.random() * hangmanGame.themeWordList.length)];
-        console.log("Logged: " + randWord);
+        this.randWord = this.themeWordList[Math.floor(Math.random() * this.themeWordList.length)];
+        console.log("Random Word: " + this.randWord);
 
         // Convert random word toLowerCase
-        var lowerWord = randWord.toLowerCase();
-        console.log("Logged toLowerCase: " + lowerWord);
+        this.lowerWord = this.randWord.toLowerCase();
+        console.log("Lower Case Word: " + this.lowerWord);
 
         // Create blanks in displayWord
-        for (var i = 0; i < randWord.length; i++) {
-            if (randWord.charAt(i) != " ") {
-                hangmanGame.displayWordString = hangmanGame.displayWordString + " _ ";
+        for (var i = 0; i < this.randWord.length; i++) {
+            if (this.randWord.charAt(i) != " ") {
+                this.blankWord.push("_");
             } else {
-                hangmanGame.displayWordString = hangmanGame.displayWordString + "\xa0\xa0";
+                //this.blankWord.push("\xa0");
             }
         };
 
-        console.log("Display Word: " + hangmanGame.displayWordString);
+        // Check blankWord matches innerText
+        console.log("Blank Word: " + this.blankWord.join(" "));
 
-        document.getElementById("hangman-word").innerText = hangmanGame.displayWordString;
+        document.getElementById("hangman-word").innerText = this.blankWord.join(" ");
 
         // Check above console logs to confirm random word generated
         console.log("-------------");
         console.log("Random word should be generated by now.");
 
-        this.getKey(userGuess, lowerWord);
     },
 
-    // Listen for key input from user and store most recent key input
-    getKey: function (evt, lWrd) {
-
-        console.log("-------------");
-        console.log("Waiting for user letter guess");
-        console.log("-------------");
-           
-        document.onkeyup = function (usrKey) {
-            console.log(usrKey.key.toLowerCase());
-            userGuess = usrKey.key.toLowerCase();
-            console.log("User Guess Before Check Guess: " + userGuess);
-            hangmanGame.checkGuess(userGuess, 10, lWrd);
-        };
+    // Check guess vs hangman word - NOT SURE IF I NEED THIS 
+    checkGuess: function (userKey) {
+        // Check if valid key input
+        // If not valid = alert user to enter valid alphabet letter
+        // Check if key already been pressed
+        // If not, store key in array, and continue to checkGuess
+        // If so, alert user that key has already been pressed 
+        hangmanGame.checkWord(userKey, hangmanGame.maxGuesses, hangmanGame.lowerWord);
     },
 
-    // Check guess vs hangman word
-    checkGuess: function (getGuess, cnt, word) {
+    //checkGuess: function (getMaxGuess, getWord) {
+    checkWord: function (userKey, getMaxGuess, getWord) {
 
-        var ifMatch = false;
-        var ifNoMatch = false;
-        var corrGuessCnt = 0;
-        var wordNoSpaces = word.replace(/\s+/g,"");
+        var ifMatch = 0;
+        var ifNoMatch = 0;
+        var wordNoSpaces = getWord.replace(/\s+/g, "");
+        var wordLength = wordNoSpaces.length;
+        var remainingGuesses = getMaxGuess - hangmanGame.wrongGuessCount;
 
         // Console log that checkGuess properly called
+        console.log("checkWord properly called");
         console.log("----------");
-        console.log("checkGuess properly called");
-        console.log("----------");
-        console.log("Current Word to Guess: " + word);
+        console.log("Current Word to Guess: " + getWord);
         console.log("Current Word with No Spaces: " + wordNoSpaces);
-        console.log("Current User Guess Passed from getKey: " + getGuess);
-        console.log("Current Guess Count: " + cnt);        
+        console.log("Current User Guess Passed from getKey: " + userKey);
+        console.log("Current Guess Remaining Count: " + remainingGuesses);
+        console.log("Correct Guess Count Before: " + hangmanGame.correctGuessCount);
+        console.log("Wrong Guess Count Before: " + hangmanGame.wrongGuessCount);
+        console.log("Before: ifNoMatch = " + ifNoMatch);
+        console.log("----------");
 
-        // While remaining guess count > 0
-        // while ((corrGuessCnt < wordNoSpaces.length) && (cnt > 0)) {
+        // Search current Hangman word for guessed input from user
+        for (j = 0; j < wordLength; j++) {
 
-        //     // console.log("----------");
-        //     // console.log("Current Count: " + cnt);
-        //     // console.log("----------");
+            // if correct guess - update word blanks - display guessed letter
+            // else if wrong - keep word blanks same - display guessed letter
+            if (userKey === wordNoSpaces.charAt(j)) {
+                console.log("User Guess Match: " + userKey);
+                hangmanGame.blankWord[j] = userKey;
 
-        //     // Search current Hangman word for guessed input from user
-        //     for (j = 0; j < wordNoSpaces.length; j++) {
+                document.getElementById("hangman-word").innerText = hangmanGame.blankWord.join(" ");
 
-        //         // if correct guess - update word blanks - keep remaining guess count same - display guessed letter
-        //         // else if wrong - keep word blanks same - decrease remaining guess count - display guessed letter
-        //         if (getGuess === wordNoSpaces.charAt(j)) {
-        //             console.log("User Guess Match");
+                hangmanGame.correctGuessCount++;
+                ifMatch++;
 
-        //             ifMatch = true;
-        //             corrGuessCnt++;
+            } else {
+                console.log("NO MATCH");
+                ifNoMatch++;
+            }
+        };
 
-        //             console.log("Current Correct Guesses: " + corrGuessCnt);
-                   
-        //            //Something wrong with line below...
-        //             // this.displayWord.charAt(j) = getGuess;
-                    
-        //             // this.guessLetters = this.guessLetters + " + " + getGuess;
-        //             // document.getElementById("hangman-word").innerText = this.displayWord;
-        //             // document.getElementById("guess-letters").innerText = this.guessLetters;
-        //         } else {
-        //             console.log("NO MATCH");
-                    
-        //             // this.guessLetters = " + " + getGuess;
-        //             // document.getElementById("guess-letters").innerText = this.guessLetters;
-        //         };               
+        hangmanGame.storeGuesses.push(userKey);
+        document.getElementById("guess-letters").innerText = hangmanGame.storeGuesses.join(" ");
 
-        //     };
+        if ((ifMatch === 0) && (ifNoMatch > 0)) {
+            hangmanGame.wrongGuessCount++;
+            remainingGuesses = getMaxGuess - hangmanGame.wrongGuessCount
+        }
 
-            // if (ifMatch === false) {
-            //     cnt--;
-            //     console.log("No Match Found, remaining guesses: " + cnt);
-            // };
+        // Console log that checkGuess ran properly
+        console.log("After: ifNoMatch = " + ifNoMatch);
+        console.log("Correct Guess Count After: " + hangmanGame.correctGuessCount);
+        console.log("Wrong Guess Count After: " + hangmanGame.wrongGuessCount);
+        console.log("Remaining Guess Count After: " + remainingGuesses);
 
-
-        //};
     }
+};
 
-}
+// Research how to run 1 onkeyup prior to starting another onkeyup
+// window.onkeyup = function start () {
+//     hangmanGame.startGame();
 
+// }
 
+// Event listener, check for key pressed, then start game
+window.onkeyup = function (keyPressed) {
+    console.log("Current Key Pressed: " + keyPressed.key.toLowerCase());
 
-//Remove when checkStartGame running properly
-//hangmanGame.startGame()
-//Currently running and displaying in console log prior to window.load "On Load Called Properly"
-hangmanGame.startGame();
+    userKey = keyPressed.key.toLowerCase();
+
+    console.log("User Guess Before Check Guess: " + userKey);
+    console.log("----------");
+
+    hangmanGame.checkGuess(userKey);
+};
 
 // Run Win Sequence
 // Win music, reset variables, restart game
