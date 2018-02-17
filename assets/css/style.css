@@ -1,0 +1,17 @@
+body {
+    background-image: url("../images/asteroids.jpg");
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.panel-heading, .panel-body, .panel-footer {
+    text-align: center;
+}
+
+span {
+    font-size: 30px;
+}
+

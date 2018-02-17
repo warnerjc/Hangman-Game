@@ -18,7 +18,7 @@ var hangmanGame = {
     numSpaces: 0,
     randWord: "",
     lowerWord: "",
-    storeGuesses: [],
+    storeGuesses: ["Start the game by guessing your first letter."],
     blankWord: [],
 
     // Valid Key String for Game Constraints
@@ -39,7 +39,7 @@ var hangmanGame = {
         this.numSpaces = 0;
         this.randWord = "";
         this.lowerWord = "";
-        this.storeGuesses = [];
+        this.storeGuesses = ["Start the game by guessing your first letter."];
         this.blankWord = [];
 
         // Update HMTL content with each newGame
@@ -59,6 +59,8 @@ var hangmanGame = {
         // Console log that game is started
         //console.log("Game Started");
         //console.log("-------------");
+
+        this.storeGuesses.pop();
 
         // Store random word from word list array
         this.randWord = this.themeWordList[Math.floor(Math.random() * this.themeWordList.length)];
@@ -115,7 +117,7 @@ var hangmanGame = {
 
             } else {
 
-                // If not, alert user that we are checking their guess vs the word
+                // If not guessed, alert user that we are checking their guess vs the word
                 //alert("--- Awesome, lets check this letter. Click OK.");
                 //console.log("--- GOOD KEY, LET'S CHECK IF IN WORD ---")
                 hangmanGame.checkWord(userKey, hangmanGame.maxGuesses, hangmanGame.lowerWord);
@@ -124,7 +126,7 @@ var hangmanGame = {
         } else {
 
             // If not valid, alert user to enter valid alphabet letter
-            alert("--- Bummer, you didn't choose a valid letter. Try again.");
+            alert("--- Bummer, you didn't choose a valid letter. Try again. ---");
             //console.log("--- CHOOSE AGAIN --- NOT A VALID KEY");
         }
 
@@ -153,6 +155,10 @@ var hangmanGame = {
         // console.log("Before: ifNoMatch = " + ifNoMatch);
         // console.log("----------");
 
+        // Store and display guessed letter
+        this.storeGuesses.push(getUserKey);
+        document.getElementById("guess-letters").innerText = this.storeGuesses.join(" ");
+
         // Search current Hangman word for guessed input from user
         for (j = 0; j < wordLength; j++) {
 
@@ -160,9 +166,10 @@ var hangmanGame = {
             if (getUserKey === getWord.charAt(j)) {
 
                 //console.log("User Guess Match: " + getUserKey);
-                hangmanGame.blankWord[j] = getUserKey;
-                document.getElementById("hangman-word").innerText = hangmanGame.blankWord.join(" ");
-                hangmanGame.correctGuessCount++;
+                this.blankWord[j] = getUserKey;
+                console.log(this.blankWord);
+                document.getElementById("hangman-word").innerText = this.blankWord.join(" ");
+                this.correctGuessCount++;
                 ifMatch++;
             
             // else if wrong - increase ifNoMatch
@@ -172,14 +179,10 @@ var hangmanGame = {
             }
         };
 
-        // Store and display guessed letter
-        hangmanGame.storeGuesses.push(getUserKey);
-        document.getElementById("guess-letters").innerText = hangmanGame.storeGuesses.join(" ");
-
         // Check if wrong guess and decrease remaining guesses 
         if ((ifMatch === 0) && (ifNoMatch > 0)) {
-            hangmanGame.wrongGuessCount++;
-            remainingGuesses = getMaxGuess - hangmanGame.wrongGuessCount;
+            this.wrongGuessCount++;
+            remainingGuesses = getMaxGuess - this.wrongGuessCount;
             document.getElementById("guess-count").innerText = remainingGuesses;
         };
 
@@ -205,7 +208,8 @@ var hangmanGame = {
 
             console.log("YOU WIN THE GAME");
             console.log("--- NEW GAME STARTED ---");
-
+            console.log(hangmanGame.randWord);
+            
             alert("YOU WIN!! Press OK to start a new game!");
 
             hangmanGame.winCount++;
@@ -218,7 +222,6 @@ var hangmanGame = {
             console.log("YOU LOSE THE GAME");
             console.log("--- NEW GAME STARTED ---");
             hangmanGame.newGame();
-
             alert("YOU LOSE!! Press OK to start a new game!");
 
         // Keep playing the game if word not guessed and guessed remaining
@@ -252,7 +255,6 @@ window.onkeyup = function (keyPressed) {
 
     //console.log("User Guess Before Check Guess: " + userKey);
     //console.log("----------");
-
 
     // Pass most recent key press, and stored guesses to checkGuess
     hangmanGame.checkGuess(userKey, hangmanGame.storeGuesses);
