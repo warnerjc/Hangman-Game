@@ -1,3 +1,5 @@
+window.onload = function () {
+
 // Create global variables = span id for updating HTML
 var hangmanWord = document.getElementById("hangman-word");
 var gLetters = document.getElementById("guess-letters");
@@ -22,10 +24,10 @@ var hangmanGame = {
     blankWord: [],
 
     // Valid Key String for Game Constraints
-    validKeys: "abcdefghijklmnopqrstuvwxyz",
+    validKeys: "abcdefghijklmnopqrstuvwxyz0123456789",
 
     // Themed Hangman Game Word List Array
-    themeWordList: ["Space Invaders", "Pac Man", "Street Fighter II", "Donkey Kong", "Ms Pac Man", "Asteroids", "Defender", "Galaxian", "Donkey Kong Jr", "Mr Do", "Popeye", "Out Run", "Pump It Up", "NBA Jam", "Gun Fight", "Sega Network Mahjong MJ3", "Hang On", "Dinosaur King", "Wheels Speed Race", "Sega Network Mahjong MJ2", "Donkey Kong 3", "Sangokushi Taisen 2", "Initial D Arcade Stage 4", "Mario Bro", "Dance Dance Revolution", "Zoo Keeper", "Initial D Arcade Stage", "World Club Champion Football", "Mortal Kombat", "Jungle Hunt", "Scramble", "Mushiking King of the Beetles", "Mahjong Fight Club 3", "Super Cobra", "Oshare Majo Love and Berry", "Centipede", "Shining Force Cross", "Pengo", "Sangokushi Taisen", "Dragons Lair", "Mortal Kombat II", "Pole Position", "Border Break", "Dig Dug", "Tempest", "TV Basketball", "The House of the Dead 4", "Radar Scope", "Tron", "Sengoku Taisen", "Dragon Quest  Monster Battle Road", "Q*bert", "Robotron 2084", "Samba de Amigo", "Asteroids Deluxe", "Missile Command", "Berzerk", "Sangokushi Taisen 3", "Pong", "Lord of Vermilion", "Sega Network Mahjong MJ4", "Kangaroo", "Battlezone", "Stargate", "Space Duel", "Big Buck Hunter", "Snake Pit", "Bagman", "Big Buck Safari", "Hard Drivin", "Gauntlet", "Sega Network Mahjong MJ5", "Millipede", "Race Drivin", "Time Traveler", "Space Ace", "Xevious", "Silver Strike Live", "H2Overdrive", "Atari Football", "Final Lap", "Paperboy", "Star Wars", "Beatmania", "Sprint 2", "Championship Sprint", "Pole Position II", "Breakout", "Sea Wolf", "Lunar Lander", "Super Sprint", "Marble Madness", "Sea Wolf II", "Rolling Thunder", "Tetris", "Arabian", "Terminator Salvation", "Blasteroids", "Super Breakout", "Pac Mania", "Indiana Jones and the Temple of Doom", "Four Trax", "Assault", "Gauntlet II", "Guitar Hero Arcade", "Drag Race", "Night Driver", "I Robot", "RBI Baseball", "Computer Space", "Death Race", "Dunk Shot", "Star Wars Return of the Jedi", "Dragon Spirit", "Triple Hunt", "Street Fighter", "Pac Man Clones", "Mario", "Golden Tee Golf", "Starhorse", "Bemani", "Sega Network Mahjong", "Sprint", "Mushiking", "Mahjong Fight Club", "Love and Berry"],
+    themeWordList: ["Space Invaders", "Pac Man", "Street Fighter II", "Donkey Kong", "Ms Pac Man", "Asteroids", "Defender", "Galaxian", "Donkey Kong Jr", "Mr Do", "Popeye", "Out Run", "Pump It Up", "NBA Jam", "Gun Fight", "Sega Network Mahjong MJ3", "Hang On", "Dinosaur King", "Wheels Speed Race", "Sega Network Mahjong MJ2", "Donkey Kong 3", "Sangokushi Taisen 2", "Initial D Arcade Stage 4", "Mario Bros", "Dance Dance Revolution", "Zoo Keeper", "Initial D Arcade Stage", "World Club Champion Football", "Mortal Kombat", "Jungle Hunt", "Scramble", "Mushiking King of the Beetles", "Mahjong Fight Club 3", "Super Cobra", "Oshare Majo Love and Berry", "Centipede", "Shining Force Cross", "Pengo", "Sangokushi Taisen", "Dragons Lair", "Mortal Kombat II", "Pole Position", "Border Break", "Dig Dug", "Tempest", "TV Basketball", "The House of the Dead 4", "Radar Scope", "Tron", "Sengoku Taisen", "Dragon Quest  Monster Battle Road", "Q*bert", "Robotron 2084", "Samba de Amigo", "Asteroids Deluxe", "Missile Command", "Berzerk", "Sangokushi Taisen 3", "Pong", "Lord of Vermilion", "Sega Network Mahjong MJ4", "Kangaroo", "Battlezone", "Stargate", "Space Duel", "Big Buck Hunter", "Snake Pit", "Bagman", "Big Buck Safari", "Hard Drivin", "Gauntlet", "Sega Network Mahjong MJ5", "Millipede", "Race Drivin", "Time Traveler", "Space Ace", "Xevious", "Silver Strike Live", "H2Overdrive", "Atari Football", "Final Lap", "Paperboy", "Star Wars", "Beatmania", "Sprint 2", "Championship Sprint", "Pole Position II", "Breakout", "Sea Wolf", "Lunar Lander", "Super Sprint", "Marble Madness", "Sea Wolf II", "Rolling Thunder", "Tetris", "Arabian", "Terminator Salvation", "Blasteroids", "Super Breakout", "Pac Mania", "Indiana Jones and the Temple of Doom", "Four Trax", "Assault", "Gauntlet II", "Guitar Hero Arcade", "Drag Race", "Night Driver", "I Robot", "RBI Baseball", "Computer Space", "Death Race", "Dunk Shot", "Star Wars Return of the Jedi", "Dragon Spirit", "Triple Hunt", "Street Fighter", "Pac Man Clones", "Mario", "Golden Tee Golf", "Starhorse", "Bemani", "Sega Network Mahjong", "Sprint", "Mushiking", "Mahjong Fight Club", "Love and Berry"],
 
     // Call newGame on Start, Game Win, or Game Loss
     newGame: function () {
@@ -40,7 +42,6 @@ var hangmanGame = {
         this.randWord = "";
         this.lowerWord = "";
         this.storeGuesses = ["Start the game by guessing your first letter."];
-        this.blankWord = [];
 
         // Update HMTL content with each newGame
         document.getElementById("guess-count").innerText = this.maxGuesses;
@@ -162,12 +163,12 @@ var hangmanGame = {
         // Search current Hangman word for guessed input from user
         for (j = 0; j < wordLength; j++) {
 
-            // if correct guess - update word blanks, increase correctGuessCount, increase ifMatch
-            if (getUserKey === getWord.charAt(j)) {
-
+           // if correct guess - update word blanks, increase correctGuessCount, increase ifMatch
+                if (getUserKey === getWord.charAt(j)) {
                 //console.log("User Guess Match: " + getUserKey);
+                //this.blankWord[j] = getUserKey;
                 this.blankWord[j] = getUserKey;
-                console.log(this.blankWord);
+                //console.log(this.blankWord);
                 document.getElementById("hangman-word").innerText = this.blankWord.join(" ");
                 this.correctGuessCount++;
                 ifMatch++;
@@ -186,7 +187,6 @@ var hangmanGame = {
             document.getElementById("guess-count").innerText = remainingGuesses;
         };
 
-
         // Console log that checkGuess ran properly
         // console.log("After: ifNoMatch = " + ifNoMatch);
         // console.log("Correct Guess Count After: " + hangmanGame.correctGuessCount);
@@ -195,10 +195,15 @@ var hangmanGame = {
         // console.log("--- Checking Win or Loss ---")
 
         // Check if last guessed letter triggers a WIN, LOSS, or CONTINUE PLAYING
-        hangmanGame.checkWinLoss(hangmanGame.correctGuessCount, hangmanGame.wrongGuessCount, wordNoSpacesCnt);
+        // hangmanGame.checkWinLoss(hangmanGame.correctGuessCount, hangmanGame.wrongGuessCount, wordNoSpacesCnt);
+        // Below code added by TA Ben to help blanks update on win game scenario prior to alerting user they won
+        setTimeout(function(){ 
+            hangmanGame.checkWinLoss(hangmanGame.correctGuessCount, hangmanGame.wrongGuessCount, wordNoSpacesCnt);
+        }, 250);
+        
+        
 
     },
-
 
     // Check if last guessed letter triggers a WIN, LOSS, or CONTINUE PLAYING
     checkWinLoss: function (correctGuessCount, wrongGuessCount, wordNoSpacesCnt) {
@@ -206,9 +211,9 @@ var hangmanGame = {
         // If all letters guessed, alert user that they won
         if (correctGuessCount === wordNoSpacesCnt) {
 
-            console.log("YOU WIN THE GAME");
-            console.log("--- NEW GAME STARTED ---");
-            console.log(hangmanGame.randWord);
+            //console.log("YOU WIN THE GAME");
+            //console.log("--- NEW GAME STARTED ---");
+            //console.log(hangmanGame.randWord);
             
             alert("YOU WIN!! Press OK to start a new game!");
 
@@ -219,28 +224,17 @@ var hangmanGame = {
         // If no more guesses, alert user that they lost
         } else if (wrongGuessCount === hangmanGame.maxGuesses) {
 
-            console.log("YOU LOSE THE GAME");
-            console.log("--- NEW GAME STARTED ---");
+            //console.log("YOU LOSE THE GAME");
+            //console.log("--- NEW GAME STARTED ---");
             hangmanGame.newGame();
             alert("YOU LOSE!! Press OK to start a new game!");
 
         // Keep playing the game if word not guessed and guessed remaining
-        } else {
-
-            console.log("--- KEEP PLAYING ---");
         }
 
-    },
+    }
 
 };
-
-// Research how to run 1 onkeyup prior to starting another onkeyup
-// window.onkeyup = function start () {
-//     hangmanGame.startGame();
-
-// }
-
-// .addEventListener
 
 // Start a game session
 hangmanGame.newGame();
@@ -259,4 +253,6 @@ window.onkeyup = function (keyPressed) {
     // Pass most recent key press, and stored guesses to checkGuess
     hangmanGame.checkGuess(userKey, hangmanGame.storeGuesses);
     
+};
+
 };
