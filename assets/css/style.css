@@ -1,11 +1,13 @@
+/* Have not styled for responsiveness besides what built into Bootstrap */
+
 body {
     background-image: url("../images/asteroids.jpg");
 }
 
 .container {
-    margin-top: 100px;
     margin-left: auto;
     margin-right: auto;
+    margin-top: 100px;
 }
 
 .panel-heading, .panel-body, .panel-footer {
@@ -15,4 +17,3 @@ body {
 span {
     font-size: 30px;
 }
-
