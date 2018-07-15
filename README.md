@@ -1,4 +1,4 @@
-# Hangman-Game
+# Welcome to Arcade Hangman!
 
 ### Overview
 
